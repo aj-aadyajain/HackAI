@@ -18,7 +18,7 @@ Computer Vision API: https://westus.dev.cognitive.microsoft.com/docs/services/5c
 Authenticate
 Authenticates your credentials and creates a client.
 '''
-subscription_key = '92fa44dc-01c2-4bdd-80d8-cb76b6454824'
+subscription_key = 'a1ff362c8bae425d9ab0ee1a11403675'
 endpoint = 'https://imagesearchhackathon.cognitiveservices.azure.com/'
 
 computervision_client = ComputerVisionClient(endpoint, CognitiveServicesCredentials(subscription_key))
@@ -56,29 +56,23 @@ def generateTags(remote_image_url):
     else:
         for category in results_remote.categories:
             if category.score * 100 > 85:
-                tags.append(category.name)
+                tags.append(category.name.lower())
 
     # Detect colors
     # Print results of color scheme
     if results_remote.color.is_bw_img > 0.5:
         tags.append("black and white")
-    tags.append(results_remote.color.accent_color)
-    tags.append(results_remote.color.dominant_colors)
+    tags.append(results_remote.color.accent_color.lower())
+    for color in results_remote.color.dominant_colors: 
+        tags.append(color.lower())
 
-    # Detect image type
-    # Prints type results with degree of accuracy
-    if results_remote.image_type.clip_art_type >= 2:
-        tags.append("clip art")
-
-    if results_remote.image_type.line_drawing_type > 0:
-        tags.append("line art")
 
     # Detect brands
     #print("Detecting brands in remote image: ")
     if len(results_remote.brands) > 0:
         for brand in results_remote.brands:
             if brand.confidence * 100 > 85:
-                tags.append(brand.name)
+                tags.append(brand.name.lower())
 
     # Detect objects
     # Print detected objects results with bounding boxes
@@ -86,7 +80,7 @@ def generateTags(remote_image_url):
     if (len(results_remote.tags) > 0):
         for tag in results_remote.tags:
             if tag.confidence * 85 > 100:
-                tags.append(tag.name)
+                tags.append(tag.name.lower())
 
 
     #Add this along with url
@@ -101,12 +95,14 @@ def imageSearch(tagTotal):
     tags = tagTotal.split(",")
     images = []
     for tag in tags:
+        #print(tag)
         for img in taggedImgs:
-            url = img[0]
+            #url = img[0]
+            #print(img)
             tagsLst = img[1]
             if tag in tagsLst:
-                filename = url.split('/')[-1]
-                images.append(urllib.request.urlretrieve(remote_image_url, filename))
+                #filename = url.split('/')[-1]
+                images.append(remote_image_url)
 
     return images
 
@@ -117,24 +113,22 @@ def imageSearch(tagTotal):
 
 '''MAIN FUNCTION'''
 option = input("Enter A for adding an image, S for Searching an image, and any other key to exit: ")
-while option[0].upper == 'A' or option[0].upper == 'S':
-    if option[0].upper == 'A':
+while option[0].upper() == 'A' or option[0].upper() == 'S':
+    if option[0].upper() == 'A':
         remote_image_url = input("Enter image url or name of an in the local repository:")
-        if remote_image_url not in list:
-            list.append(remote_image_url)
+        if remote_image_url not in lst:
+            lst.append(remote_image_url)
             #filename = link.split('/')[-1]
             #urllib.request.urlretrieve(remote_image_url, filename)
             tags = generateTags(remote_image_url) #This function generates the tags only once.
             taggedImgs.append([remote_image_url, tags])
+            print(taggedImgs)
         else:
             print("Sorry, It's already there!")
-    elif option[1] == 'S':
+    elif option[0].upper() == 'S':
         tagTotal = input("Enter tags separated by commas: ")
-        withoutSpaces = tagTotal.replace(",", "")
-        withoutSpaces = tagTotal.replace(" ", "")
-        if withoutSpaces.isalpha():
-            print(imageSearch(tagTotal)) #returns all images that fit the tags.  
-        else:
-            print("Please only add spaces, commas and letters!")
+        #withoutSpaces = tagTotal.replace(",", "")
+        #withoutSpaces = tagTotal.replace(" ", "")
+        print(imageSearch(tagTotal)) #returns all images that fit the tags.  
     option = input("Enter A for adding an image, S for Searching an image, and any other key to exit: ")
 
