@@ -18,6 +18,8 @@ Computer Vision API: https://westus.dev.cognitive.microsoft.com/docs/services/5c
 Authenticate
 Authenticates your credentials and creates a client.
 '''
+#ONLY AVAILABLE DURING THE HACKATHON
+#WILL BE CHANGED LATER
 subscription_key = 'a1ff362c8bae425d9ab0ee1a11403675'
 endpoint = 'https://imagesearchhackathon.cognitiveservices.azure.com/'
 
