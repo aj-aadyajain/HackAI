@@ -18,8 +18,6 @@ Computer Vision API: https://westus.dev.cognitive.microsoft.com/docs/services/5c
 Authenticate
 Authenticates your credentials and creates a client.
 '''
-#ONLY AVAILABLE DURING THE HACKATHON
-#WILL BE CHANGED LATER
 subscription_key = 'a1ff362c8bae425d9ab0ee1a11403675'
 endpoint = 'https://imagesearchhackathon.cognitiveservices.azure.com/'
 
@@ -124,7 +122,7 @@ while option[0].upper() == 'A' or option[0].upper() == 'S':
             #urllib.request.urlretrieve(remote_image_url, filename)
             tags = generateTags(remote_image_url) #This function generates the tags only once.
             taggedImgs.append([remote_image_url, tags])
-            print(taggedImgs)
+            print(tags)
         else:
             print("Sorry, It's already there!")
     elif option[0].upper() == 'S':
