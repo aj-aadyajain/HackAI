@@ -1,12 +1,11 @@
 from io import BytesIO
 import os
-from PIL import Image, ImageDraw
+#from PIL import Image, ImageDraw
 import requests
 
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from msrest.authentication import CognitiveServicesCredentials
 import urllib.request
-
 '''
 RESOURCES: References: 
 Computer Vision SDK: https://docs.microsoft.com/en-us/python/api/azure-cognitiveservices-vision-computervision/?view=azure-python
@@ -18,8 +17,8 @@ Computer Vision API: https://westus.dev.cognitive.microsoft.com/docs/services/5c
 Authenticate
 Authenticates your credentials and creates a client.
 '''
-subscription_key = 'a1ff362c8bae425d9ab0ee1a11403675'
-endpoint = 'https://imagesearchhackathon.cognitiveservices.azure.com/'
+subscription_key = '<removed for confidentiality>'
+endpoint = '<removed for confidentiality>'
 
 computervision_client = ComputerVisionClient(endpoint, CognitiveServicesCredentials(subscription_key))
 
@@ -27,15 +26,18 @@ computervision_client = ComputerVisionClient(endpoint, CognitiveServicesCredenti
 lst = []
 #lst.append("https://moderatorsampleimages.blob.core.windows.net/samples/sample16.png")
 taggedImgs = []
+
+
 #This is the one that generates tags for images 
 def generateTags(remote_image_url):
 
     #image_features = ['objects','tags']
     tags = []
     remote_image_features = ['categories','brands','color','objects','tags']
-    if 'www' not in remote_image_url:
+    if 'www' not in remote_image_url and 'http' not in remote_image_url:
         local_image_objects = open(remote_image_url, "rb")
-        results_remote = computervision_client.analyze_image(local_image_objects , remote_image_features)
+        #image_l = Image(remote_image_url)
+        results_remote = computervision_client.analyze_image("https://github.com/aj-aadyajain/HackAI/blob/main/" + local_image_objects , remote_image_features)
     else:
         results_remote = computervision_client.analyze_image(remote_image_url , remote_image_features)
 
